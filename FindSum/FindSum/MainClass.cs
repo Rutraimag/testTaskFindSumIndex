@@ -14,52 +14,25 @@ namespace FindSum
         {
             start = 0;
             end = 0;
-            List<ulong> remainder = new List<ulong>(list.Count);
-            if (list[0] % sum == 0 && list[0] != 0)
+            int i = 0, j = 0;
+            ulong temp_sum = 0;
+            while(j < list.Count)
             {
-                end = 1;
-                return;
-            }
-            remainder.Add(list[0] % sum);
-            HashSet<ulong> set = new HashSet<ulong>();
-            if (list[0] != 0)
-            {
-                set.Add(remainder[0]);
-            }
-            ulong? ost = null;
-            for (int i = 1; i < list.Count() && ost == null; ++i)
-            {
-                remainder.Add(list[i] == 0 ? sum : (remainder[i - 1] +  list[i] % sum) % sum);
-                if (remainder[i] == 0 && list[i] != 0)
+                temp_sum += list[j];
+                while (i < j && temp_sum > sum)
                 {
-                    end = i + 1;
+                    temp_sum -= list[i];    
+                    i++;
+                }
+                if(temp_sum == sum)
+                {
+                    start = i;
+                    end = j + 1;
                     return;
                 }
-                if (set.Contains(remainder[i]))
-                {
-                    ost = remainder[i];
-                }
-                else if (remainder[i] != sum)
-                {
-                    set.Add(remainder[i]);
-                }
+                j++;
             }
-            if(ost != null)
-            {
-                for(int i = 0; i < list.Count && end == 0; ++i)
-                {
-                    if (remainder[i] == ost){
-                        if(start == 0)
-                        {
-                            start = i + 1;
-                        }
-                        else
-                        {
-                            end = i + 1;
-                        }
-                    }
-                }
-            }
+            
 
         }
 
@@ -72,7 +45,9 @@ namespace FindSum
             System.Console.WriteLine(start + " " + end);
             FindElementsForSum(new List<uint> { 4, 5, 6, 7 }, 18, out start, out end); //start будет равен 1 и end 4;
             System.Console.WriteLine(start + " " + end);
-            FindElementsForSum(new List<uint> { 4, 36, 5, 6, 7 }, 18, out start, out end); //start будет равен 1 и end 2;
+            FindElementsForSum(new List<uint> { 4, 36, 5, 6, 7 }, 18, out start, out end); //start будет равен 2 и end 5;
+            System.Console.WriteLine(start + " " + end);
+            FindElementsForSum(new List<uint> { 4, 36, 6, 7 }, 18, out start, out end); //start будет равен 0 и end 0;
             System.Console.WriteLine(start + " " + end);
             FindElementsForSum(new List<uint> { 4, 5, 6, 7 }, 4, out start, out end); //start будет равен 0 и end 1;
             System.Console.WriteLine(start + " " + end);
